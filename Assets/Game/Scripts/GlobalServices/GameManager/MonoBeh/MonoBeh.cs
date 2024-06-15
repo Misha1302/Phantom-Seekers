@@ -12,6 +12,7 @@
 
         protected void Awake()
         {
+            /*
             GameSingletons.DependencyInjector.Inject(this);
 
             if (isEnabled)
@@ -20,6 +21,7 @@
                 CollisionDetector = gameObject.AddComponent<CollisionDetector>();
 
             OnCreated();
+*/
         }
 
         private void Update()
