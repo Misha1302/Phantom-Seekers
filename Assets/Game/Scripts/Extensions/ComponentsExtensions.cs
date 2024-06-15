@@ -1,6 +1,5 @@
 ﻿namespace Game.Scripts.Extensions
 {
-    using Game.Scripts.GlobalServices.Scenes;
     using JetBrains.Annotations;
     using UnityEngine;
 
@@ -18,8 +17,5 @@
 
         public static void AddComponentIfNotAdded<T>(this Component component) where T : Component =>
             component.GetOrAddComponent<T>();
-
-        [Pure] public static bool IsDestroying(this Component component) =>
-            component.HasComponent<DestroyingTag>();
     }
 }
