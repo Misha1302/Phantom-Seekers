@@ -5,7 +5,10 @@ namespace Game.GameLogic.Scripts
 
     public struct NetworkInputData : INetworkInput
     {
-        public Vector3 Direction;
-        public bool Jump;
+        public Vector3 MovementDirection;
+        public Vector2 RotationDirection;
+
+        public override string ToString() =>
+            $"MovementDirection: {MovementDirection}; RotationDirection: {RotationDirection}";
     }
 }

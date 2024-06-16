@@ -4,52 +4,32 @@ namespace Game.GameLogic.Scripts
     using System.Collections.Generic;
     using Fusion;
     using Fusion.Sockets;
-    using UnityEngine;
+    using Game.Scripts.Singletons;
     using UnityEngine.SceneManagement;
 
-    public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
+    public class BasicSpawner : MonoBehaviourSingleton<BasicSpawner>, INetworkRunnerCallbacks
     {
-        [SerializeField] private NetworkPrefabRef playerPrefab;
-        private readonly Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new();
+        private readonly InjectField<InputService> _inputService = new();
+        private readonly InjectField<PlayerSpawnerService> _playerSpawnerService = new();
+
+
         private NetworkRunner _runner;
-
-        private void OnGUI()
-        {
-            if (_runner != null) return;
-
-            if (GUI.Button(new Rect(0, 0, 500, 100), "Host"))
-                StartGame(GameMode.Host);
-            if (GUI.Button(new Rect(0, 100, 500, 100), "Join"))
-                StartGame(GameMode.Client);
-        }
+        private readonly InjectField<SceneService> _sceneService = new();
 
         public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
         {
             if (!runner.IsServer) return;
-
-            // Create a unique position for the player
-            var spawnPosition = new Vector3(player.RawEncoded % runner.Config.Simulation.PlayerCount * 3, 1, 0);
-            var networkPlayerObject = runner.Spawn(playerPrefab, spawnPosition, Quaternion.identity, player);
-            // Keep track of the player avatars for easy access
-            _spawnedCharacters.Add(player, networkPlayerObject);
+            _playerSpawnerService.Value.Spawn(runner, player);
         }
 
         public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
         {
-            if (!_spawnedCharacters.TryGetValue(player, out var networkObject)) return;
-
-            runner.Despawn(networkObject);
-            _spawnedCharacters.Remove(player);
+            _playerSpawnerService.Value.Despawn(runner, player);
         }
 
         public void OnInput(NetworkRunner runner, NetworkInput input)
         {
-            var data = new NetworkInputData
-            {
-                Direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")),
-                Jump = Input.GetKey(KeyCode.Space)
-            };
-            input.Set(data);
+            input.Set(_inputService.Value.GetData());
         }
 
         public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
@@ -79,8 +59,10 @@ namespace Game.GameLogic.Scripts
         public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress) { }
 
 
-        private async void StartGame(GameMode mode)
+        public async void StartGame(GameMode mode)
         {
+            await _sceneService.Value.LoadScene("Core");
+
             // Create the Fusion runner and let it know that we will be providing user input
             _runner = gameObject.AddComponent<NetworkRunner>();
             _runner.ProvideInput = true;
@@ -90,7 +72,7 @@ namespace Game.GameLogic.Scripts
             var sceneInfo = new NetworkSceneInfo();
             if (scene.IsValid) sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
 
-            // Start or join (depends on gamemode) a session with a specific name
+            // Start or join (depends on game-mode) a session with a specific name
             await _runner.StartGame(new StartGameArgs
             {
                 GameMode = mode,
