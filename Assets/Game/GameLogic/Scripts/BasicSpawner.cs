@@ -1,62 +1,27 @@
 namespace Game.GameLogic.Scripts
 {
-    using System;
-    using System.Collections.Generic;
     using Fusion;
-    using Fusion.Sockets;
     using Game.Scripts.Singletons;
     using UnityEngine.SceneManagement;
 
-    public class BasicSpawner : MonoBehaviourSingleton<BasicSpawner>, INetworkRunnerCallbacks
+    public class BasicSpawner : SimulationBehaviourSingleton<BasicSpawner>, IPlayerJoined, IPlayerLeft
     {
-        private readonly InjectField<InputService> _inputService = new();
         private readonly InjectField<PlayerSpawnerService> _playerSpawnerService = new();
+        private readonly InjectField<SceneService> _sceneService = new();
 
 
         private NetworkRunner _runner;
-        private readonly InjectField<SceneService> _sceneService = new();
 
-        public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+        public void PlayerJoined(PlayerRef player)
         {
-            if (!runner.IsServer) return;
-            _playerSpawnerService.Value.Spawn(runner, player);
+            if (player == _runner.LocalPlayer)
+                _playerSpawnerService.Value.Spawn(_runner, player);
         }
 
-        public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
+        public void PlayerLeft(PlayerRef player)
         {
-            _playerSpawnerService.Value.Despawn(runner, player);
+            _playerSpawnerService.Value.Despawn(_runner, player);
         }
-
-        public void OnInput(NetworkRunner runner, NetworkInput input)
-        {
-            input.Set(_inputService.Value.GetData());
-        }
-
-        public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
-        public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
-        void INetworkRunnerCallbacks.OnConnectedToServer(NetworkRunner runner) { }
-        public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason) { }
-
-        public void OnConnectRequest(NetworkRunner runner,
-            NetworkRunnerCallbackArgs.ConnectRequest request,
-            byte[] token) { }
-
-        public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { }
-        public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
-        public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
-        public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
-        public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
-        public void OnSceneLoadDone(NetworkRunner runner) { }
-        public void OnSceneLoadStart(NetworkRunner runner) { }
-        public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
-        public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
-
-        public void OnReliableDataReceived(NetworkRunner runner,
-            PlayerRef player,
-            ReliableKey key,
-            ArraySegment<byte> data) { }
-
-        public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress) { }
 
 
         public async void StartGame(GameMode mode)

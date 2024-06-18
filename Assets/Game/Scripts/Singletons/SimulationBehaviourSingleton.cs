@@ -1,9 +1,10 @@
 namespace Game.Scripts.Singletons
 {
+    using Fusion;
     using Game.Scripts.Helpers;
     using UnityEngine;
 
-    public abstract class MonoBehaviourSingleton<TSelf> : MonoBehaviour
+    public abstract class SimulationBehaviourSingleton<TSelf> : SimulationBehaviour
     {
         public static TSelf Instance;
 
@@ -18,7 +19,7 @@ namespace Game.Scripts.Singletons
             Instance = (TSelf)(object)this;
             if (transform.root != transform)
                 Thrower.InvalidOpEx(
-                    $"GameObject with script {nameof(MonoBehaviourSingleton<TSelf>)} must be the root of hierarchy"
+                    $"GameObject with script {nameof(SimulationBehaviourSingleton<TSelf>)} must be the root of hierarchy"
                 );
 
             DontDestroyOnLoad(this);

@@ -13,7 +13,7 @@ namespace Game.GameLogic.Scripts
 
         private void Start()
         {
-            _player = FindAnyObjectByType<Player>().transform;
+            _player = GetComponentInParent<Player>().transform;
         }
 
         private void LateUpdate()

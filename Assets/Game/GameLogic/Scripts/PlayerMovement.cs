@@ -8,6 +8,7 @@ namespace Game.GameLogic.Scripts
     public class PlayerMovement : NetworkBehaviour
     {
         [SerializeField] private Vector3 speed = new(1f, 0, 5f);
+        private readonly InjectField<InputService> _inputService = new();
         private Rigidbody _rb;
 
         private void Awake()
@@ -17,9 +18,10 @@ namespace Game.GameLogic.Scripts
 
         public override void FixedUpdateNetwork()
         {
-            if (!GetInput(out NetworkInputData data)) return;
+            if (!HasStateAuthority)
+                return;
 
-            var direction = data.MovementDirection;
+            var direction = _inputService.Value.GetData().MovementDirection;
             direction.Scale(speed * Runner.DeltaTime);
             direction = _rb.transform.TransformDirection(direction);
             _rb.velocity = direction.WithY(_rb.velocity.y);

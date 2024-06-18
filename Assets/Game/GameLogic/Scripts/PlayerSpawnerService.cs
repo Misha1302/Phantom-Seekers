@@ -16,6 +16,8 @@ namespace Game.GameLogic.Scripts
 
         public void Spawn(NetworkRunner runner, PlayerRef player)
         {
+            if (_spawnedCharacters.ContainsKey(player)) return;
+
             var spawnPosition = new Vector3(_playerIndex * 3, 1, 0);
             var networkPlayerObject = runner.Spawn(playerPrefab, spawnPosition, Quaternion.identity, player);
             _spawnedCharacters.Add(player, networkPlayerObject);

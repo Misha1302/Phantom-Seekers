@@ -13,12 +13,11 @@ namespace Game.GameLogic.Scripts
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Initialize()
         {
-            GameSingletons.DependencyInjector.DependencyContainer.AddSingle(new InputService());
-            GameSingletons.DependencyInjector.DependencyContainer.AddSingle(new SceneService());
-            GameSingletons.DependencyInjector.DependencyContainer.AddSingle(new CursorService());
-            GameSingletons.DependencyInjector.DependencyContainer.AddSingle(
-                Object.FindAnyObjectByType<PlayerSpawnerService>
-            );
+            var container = GameSingletons.DependencyInjector.DependencyContainer;
+            container.AddSingle(new InputService());
+            container.AddSingle(new SceneService());
+            container.AddSingle(new CursorService());
+            container.AddSingle(() => Object.FindAnyObjectByType<PlayerSpawnerService>(FindObjectsInactive.Include));
 
             InitAllInitializers();
         }

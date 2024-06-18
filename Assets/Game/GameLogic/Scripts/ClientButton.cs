@@ -1,7 +1,6 @@
-namespace Game.Scripts.Singletons
+namespace Game.GameLogic.Scripts
 {
     using Fusion;
-    using Game.GameLogic.Scripts;
     using UnityEngine;
     using UnityEngine.UI;
 
@@ -11,7 +10,7 @@ namespace Game.Scripts.Singletons
         private void Start()
         {
             GetComponent<Button>().onClick.AddListener(() =>
-                BasicSpawner.Instance.StartGame(GameMode.Client)
+                BasicSpawner.Instance.StartGame(GameMode.Shared)
             );
         }
     }
