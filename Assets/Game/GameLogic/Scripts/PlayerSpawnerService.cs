@@ -8,7 +8,7 @@ namespace Game.GameLogic.Scripts
     public class PlayerSpawnerService : MonoBehaviour
     {
         [SerializeField] private NetworkPrefabRef playerPrefab;
-        [SerializeField] private GameObject cameraPrefab;
+        [SerializeField] private Camera cameraPrefab;
 
         private readonly Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new();
 
@@ -33,9 +33,12 @@ namespace Game.GameLogic.Scripts
             FindObjectsByType<Camera>(FindObjectsInactive.Include, FindObjectsSortMode.None).ForAll(Destroy);
 
             var mainCamera = Instantiate(cameraPrefab).transform;
+            mainCamera.GetComponent<CameraFollower>()
+                .SetTarget(parent)
+                .SetOffset(new Vector3(0, 1, 0));
 
-            mainCamera.localPosition = new Vector3(0, 1, 0);
-            mainCamera.SetParent(parent);
+            mainCamera.GetComponent<CameraRotator>()
+                .SetTarget(parent);
         }
 
         public void Despawn(NetworkRunner runner, PlayerRef player)

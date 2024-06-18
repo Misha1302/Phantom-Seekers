@@ -4,8 +4,7 @@ namespace Game.GameLogic.Scripts
     using UnityEngine;
     using UnityEngine.UI;
 
-    [RequireComponent(typeof(Button))]
-    public class ClientButton : MonoBehaviour
+    public class StartGameButton : MonoBehaviour
     {
         private void Start()
         {

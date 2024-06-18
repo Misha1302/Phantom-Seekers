@@ -199,7 +199,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab:
     RawGuidValue: ebfe0cc372bf8cf4c9fc3ae5b1c84b10
-  cameraPrefab: {fileID: 5940334841535037618, guid: e6a88df9e41e31c4ab55b42c1792b7d9, type: 3}
+  cameraPrefab: {fileID: 4603533627308677423, guid: e6a88df9e41e31c4ab55b42c1792b7d9, type: 3}
 --- !u!4 &1133950949
 Transform:
   m_ObjectHideFlags: 0

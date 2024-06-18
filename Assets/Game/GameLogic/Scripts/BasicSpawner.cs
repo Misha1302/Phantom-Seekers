@@ -1,5 +1,6 @@
 namespace Game.GameLogic.Scripts
 {
+    using System;
     using Fusion;
     using Game.Scripts.Singletons;
     using UnityEngine.SceneManagement;
@@ -10,7 +11,7 @@ namespace Game.GameLogic.Scripts
         private readonly InjectField<SceneService> _sceneService = new();
 
 
-        private NetworkRunner _runner;
+        [NonSerialized] private NetworkRunner _runner;
 
         public void PlayerJoined(PlayerRef player)
         {
