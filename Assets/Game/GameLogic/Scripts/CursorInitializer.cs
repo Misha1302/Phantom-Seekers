@@ -1,5 +1,7 @@
 namespace Game.GameLogic.Scripts
 {
+    using Game.GameLogic.Scripts.Services;
+
     public class CursorInitializer
     {
         [Init]
@@ -8,9 +10,10 @@ namespace Game.GameLogic.Scripts
             new InjectField<SceneService>().Value.OnSceneChanged += scene =>
             {
                 var cursorService = new InjectField<CursorService>().Value;
-                if (scene == "Core")
-                    cursorService.Hide();
-                else cursorService.Show();
+
+                // if (scene == "Core")
+                //     cursorService.Hide();
+                // else cursorService.Show();
             };
         }
     }

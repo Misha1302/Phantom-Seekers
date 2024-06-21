@@ -2,6 +2,7 @@ namespace Game.GameLogic.Scripts
 {
     using System;
     using Fusion;
+    using Game.GameLogic.Scripts.Services;
     using Game.Scripts.Singletons;
     using UnityEngine.SceneManagement;
 
@@ -29,11 +30,8 @@ namespace Game.GameLogic.Scripts
         {
             await _sceneService.Value.LoadScene("Core");
 
-            // Create the Fusion runner and let it know that we will be providing user input
             _runner = gameObject.AddComponent<NetworkRunner>();
-            _runner.ProvideInput = true;
 
-            // Create the NetworkSceneInfo from the current scene
             var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
             var sceneInfo = new NetworkSceneInfo();
             if (scene.IsValid) sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);

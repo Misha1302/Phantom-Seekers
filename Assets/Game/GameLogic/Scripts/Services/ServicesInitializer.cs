@@ -1,9 +1,10 @@
-namespace Game.GameLogic.Scripts
+namespace Game.GameLogic.Scripts.Services
 {
     using System;
     using System.Linq;
     using System.Reflection;
     using Game.Scripts.Extensions;
+    using Game.Scripts.Replay;
     using Game.Scripts.Singletons;
     using UnityEngine;
     using Object = UnityEngine.Object;
@@ -16,6 +17,7 @@ namespace Game.GameLogic.Scripts
             var container = GameSingletons.DependencyInjector.DependencyContainer;
             container.AddSingle(new InputService());
             container.AddSingle(new SceneService());
+            container.AddSingle(() => new GameObject().AddComponent<ReplayService>());
             container.AddSingle(new CursorService());
             container.AddSingle(() => Object.FindAnyObjectByType<PlayerSpawnerService>(FindObjectsInactive.Include));
 

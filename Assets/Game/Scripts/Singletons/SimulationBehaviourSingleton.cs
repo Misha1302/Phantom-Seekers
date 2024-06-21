@@ -2,7 +2,6 @@ namespace Game.Scripts.Singletons
 {
     using Fusion;
     using Game.Scripts.Helpers;
-    using UnityEngine;
 
     public abstract class SimulationBehaviourSingleton<TSelf> : SimulationBehaviour
     {

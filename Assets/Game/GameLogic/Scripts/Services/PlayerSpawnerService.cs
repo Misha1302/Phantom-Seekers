@@ -1,4 +1,4 @@
-namespace Game.GameLogic.Scripts
+namespace Game.GameLogic.Scripts.Services
 {
     using System.Collections.Generic;
     using Fusion;
