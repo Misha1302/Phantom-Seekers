@@ -1,5 +1,6 @@
 namespace Game.Scripts.Replay
 {
+    using System;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -9,15 +10,24 @@ namespace Game.Scripts.Replay
         private Transform[] _objectsToTrack;
         private bool _recording;
 
+        private float _timeSinceUpdate;
+
         public void Update()
         {
-            if (_recording)
+            if (!_recording) return;
+
+            _timeSinceUpdate += Time.deltaTime;
+            if (_timeSinceUpdate >= 1f / 30f)
+            {
+                _timeSinceUpdate = 0f;
                 SaveFrame();
+            }
         }
 
         public void Init(Transform[] objectsToTrack)
         {
             _objectsToTrack = objectsToTrack;
+            DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 
         public void StartRecord()

@@ -8,7 +8,6 @@
     public class PlayRecordButton : Button
     {
         private readonly InjectField<ReplayService> _replayService = new();
-        private readonly float _speed = 1.5f;
 
         protected override void Start()
         {
@@ -18,7 +17,7 @@
             );
         }
 
-        public IEnumerator Play()
+        public IEnumerator Play(float speed = 1f)
         {
             var list = _replayService.Value.Compile();
             var startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -38,7 +37,7 @@
             yield break;
 
             int FrameIndex() =>
-                (int)((DateTimeOffset.Now.ToUnixTimeMilliseconds() - startTime) * _speed / (1f / 30f * 1000));
+                (int)((DateTimeOffset.Now.ToUnixTimeMilliseconds() - startTime) * speed / (1f / 30f * 1000));
         }
     }
 }

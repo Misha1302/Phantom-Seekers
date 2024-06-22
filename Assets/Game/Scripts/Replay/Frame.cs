@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    public class Frame
+    public readonly struct Frame
     {
         private readonly List<(Transform, SavableData)> _objs;
 
