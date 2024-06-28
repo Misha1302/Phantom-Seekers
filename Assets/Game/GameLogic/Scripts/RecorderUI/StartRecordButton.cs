@@ -1,5 +1,6 @@
 ﻿namespace Game.GameLogic.Scripts.RecorderUI
 {
+    using System.Linq;
     using Game.Scripts.Replay;
     using UnityEngine;
     using UnityEngine.UI;
@@ -13,7 +14,9 @@
             base.Start();
             onClick.AddListener(() =>
             {
-                _replayService.Value.Init(FindObjectsByType<Transform>(FindObjectsSortMode.None));
+                var objectsToTrack = FindObjectsByType<Transform>(FindObjectsSortMode.None)
+                    .Select(x => x.root).Distinct().ToArray();
+                _replayService.Value.Init(objectsToTrack);
                 _replayService.Value.StartRecord();
             });
         }

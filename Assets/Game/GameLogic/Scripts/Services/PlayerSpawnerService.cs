@@ -30,15 +30,15 @@ namespace Game.GameLogic.Scripts.Services
 
         private void SpawnCamera(Transform parent)
         {
-            FindObjectsByType<Camera>(FindObjectsInactive.Include, FindObjectsSortMode.None).ForAll(Destroy);
+            FindObjectsByType<Camera>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+                .ForAll(x => Destroy(x.gameObject));
 
             var mainCamera = Instantiate(cameraPrefab).transform;
             mainCamera.GetComponent<CameraFollower>()
                 .SetTarget(parent)
-                .SetOffset(new Vector3(0, 1, 0));
+                .SetOffset(new Vector3(0, 0.9f, 0));
 
-            mainCamera.GetComponent<CameraRotator>()
-                .SetTarget(parent);
+            mainCamera.GetComponent<CameraRotator>().SetTarget(parent);
         }
 
         public void Despawn(NetworkRunner runner, PlayerRef player)

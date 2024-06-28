@@ -6,10 +6,11 @@ namespace Game.GameLogic.Scripts
     {
         private Vector3 _offset;
         private Transform _target;
+        private bool _targetInitialized;
 
-        private void LateUpdate()
+        private void FixedUpdate()
         {
-            if (_target == null) return;
+            if (!_targetInitialized) return;
 
             transform.position = _target.position + _offset;
         }
@@ -23,6 +24,7 @@ namespace Game.GameLogic.Scripts
         public CameraFollower SetOffset(Vector3 offset)
         {
             _offset = offset;
+            _targetInitialized = true;
             return this;
         }
     }

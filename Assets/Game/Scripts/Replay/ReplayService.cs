@@ -12,7 +12,7 @@ namespace Game.Scripts.Replay
 
         private float _timeSinceUpdate;
 
-        public void Update()
+        public void FixedUpdate()
         {
             if (!_recording) return;
 
@@ -45,6 +45,7 @@ namespace Game.Scripts.Replay
             var frame = new Frame(_objectsToTrack.Length);
             foreach (var obj in _objectsToTrack)
                 frame.Add(obj, new SavableData(obj.position, obj.eulerAngles, obj.localScale));
+
             _frames.Add(frame);
         }
 
